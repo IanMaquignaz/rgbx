@@ -93,7 +93,18 @@ def get_rgb2x_demo():
                 generated_image = (generated_image, f"Generated {aov_name} {i}")
                 return_list.append(generated_image)
 
-        return return_list
+        return return_list, return_list
+
+    def trigger_save_all(save_dir, return_list):
+        #generated_image = (generated_image, f"Generated {aov_name} {i}")
+        status = f"Error? Nothing saved, check {save_dir}"
+        save_dir = str(save_dir).strip()
+        os.makedirs(save_dir, exist_ok=True)
+        for image, label in return_list:
+            label = label.split("Generated ")[-1].replace(" ", "_")+".png"
+            image.save(os.path.join(save_dir, label))
+        status = "Images saved"
+        return status
 
     block = gr.Blocks()
     with block:
@@ -139,6 +150,10 @@ def get_rgb2x_demo():
                     elem_id="gallery",
                     columns=2,
                 )
+                # with gr.Row():
+                save_dir_input = gr.Textbox(label="Folder", value=current_directory)
+                save_button = gr.Button("Save All Images")
+                status_output = gr.Textbox(label="Status")
 
         inputs = [
             photo,
@@ -146,7 +161,15 @@ def get_rgb2x_demo():
             inference_step,
             num_samples,
         ]
-        run_button.click(fn=callback, inputs=inputs, outputs=result_gallery, queue=True)
+    
+        return_list_state = gr.State([])
+        run_button.click(fn=callback, inputs=inputs, outputs=[result_gallery,return_list_state], queue=True)
+
+        save_button.click(
+            fn=trigger_save_all,
+            inputs=[save_dir_input, return_list_state],
+            outputs=status_output
+        )
 
     return block
 
