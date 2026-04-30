@@ -117,7 +117,7 @@ def get_rgb2x_demo():
                 photo = gr.File(label="Photo", file_types=[".exr", ".png", ".jpg"])
 
                 gr.Markdown("### Parameters")
-                run_button = gr.Button(label="Run")
+                run_button = gr.Button("Run")
                 with gr.Accordion("Advanced options", open=False):
                     seed = gr.Slider(
                         label="Seed",
@@ -161,7 +161,7 @@ def get_rgb2x_demo():
             inference_step,
             num_samples,
         ]
-    
+
         return_list_state = gr.State([])
         run_button.click(fn=callback, inputs=inputs, outputs=[result_gallery,return_list_state], queue=True)
 

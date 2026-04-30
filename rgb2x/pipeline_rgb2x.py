@@ -8,7 +8,7 @@ import torch
 from diffusers.configuration_utils import register_to_config
 from diffusers.image_processor import VaeImageProcessor
 from diffusers.loaders import (
-    LoraLoaderMixin,
+    StableDiffusionLoraLoaderMixin,
     TextualInversionLoaderMixin,
 )
 from diffusers.models import AutoencoderKL, UNet2DConditionModel
@@ -136,7 +136,7 @@ class StableDiffusionAOVPipelineOutput(BaseOutput):
 
 
 class StableDiffusionAOVMatEstPipeline(
-    DiffusionPipeline, TextualInversionLoaderMixin, LoraLoaderMixin
+    DiffusionPipeline, TextualInversionLoaderMixin, StableDiffusionLoraLoaderMixin
 ):
     r"""
     Pipeline for AOVs.
