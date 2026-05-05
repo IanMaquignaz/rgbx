@@ -18,8 +18,8 @@ def get_pipeline(disable_progress_bar=False):
         "zheng95z/rgb-to-x",
         torch_dtype=torch.float16,
         cache_dir=os.path.join(current_directory, "model_cache"),
-        device_map="balanced" if torch.cuda.is_available() else "cpu",
-    )
+        # device_map="balanced" if torch.cuda.is_available() else "cpu", # OR torch.device("cuda") below
+    ).to("cuda" if torch.cuda.is_available() else "cpu") # OR device_map="balanced" above
     pipe.scheduler = DDIMScheduler.from_config(
         pipe.scheduler.config, rescale_betas_zero_snr=True, timestep_spacing="trailing"
     )
